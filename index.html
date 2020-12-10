@@ -1,0 +1,76 @@
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css" />
+</head>
+
+<body>
+    <div id="app">
+        <div class="app-palyer">
+            <!-- 音乐盒的搜索框部分开始 -->
+            <div class="app-player-searchBar">
+                <div class="title">网抑云音乐盒</div> <input type="text" v-model="keywords" @keydown.stop="handleSearchMusic"></div>
+            <!-- 音乐盒的搜索框部分结束 -->
+            <!-- 音乐盒内容部分 开始-->
+            <div class="app-player-content">
+                <!-- 左边歌单 开始-->
+                <div class="app-player-content-left">
+                    <div class="app-player-songs-list">
+                        <div class="app-player-songs-list-item" v-for="(item,index) in songs">
+                            <div class="player-audio" @click="musicPlay(item.id)"></div>
+                            <div :title="item.name" class="player-name">{{item.name}}</div>
+                            <div :class="['player-mv', {hidden:item.mvid===0}]" @click.stop="openMv(item.mvid)"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 左边歌单结束 -->
+                <!-- 中间歌曲播放的动画 开始 -->
+                <div class="app-player-content-middle">
+                    <img src="./img/player_bar.png" alt="" :class="['player-bar',{playing:!isMusicPause}]">
+                    <img :src="faceImgUrl" alt="" :class="['cover', {autorotate:!isMusicPause}]">
+                    <img src="./img/disc.png" alt="" :class="['disc', {autorotate:!isMusicPause}]">
+                </div>
+                <!-- 中间歌曲播放的动画 结束 -->
+                <!-- 右边评论部分 开始 -->
+                <div class="app-player-content-right">
+                    <h5 class="comment-title">热门留言</h5>
+                    <div class="comment-list">
+                        <div class="comment-list-item" v-for="(item,index) in pinNews">
+                            <div class="imageWrapper"><img :src="item.user.avatarUrl" alt=""></div>
+                            <div class="comment-content">
+                                <div class="nickName">{{item.user.nickname}}</div>
+                                <div class="content">{{item.content}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右边评论部分 结束 -->
+            </div>
+            <!-- 下面播放歌曲及mv插件部分  开始、 -->
+            <div class="app-player-footer">
+                <!-- 音乐播放 -->
+                <audio :src="musicUrl" ref="audioDom" @pause="songPause" controls="controls" loop="loop" autoplay="autoplay" @play="songPlaying">
+                </audio>
+                <div :class="['video-box', {hidden:!isMvPlaying}]">
+                    <!-- mv 部分播放 -->
+                    <div class="vedio-close" @click="closeMv">X</div>
+
+                    <video :src="mvUrl" ref="videoDom" controls="controls" autoplay="autoplay" loop="loop"></video>
+                    <div class="video-mask"></div>
+                </div>
+            </div>
+            <!-- 下面播放歌曲及mv插件部分  结束 -->
+
+        </div>
+    </div>
+</body>
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./node_modules/axios/dist/axios.js"></script>
+<script src="./js/myaxios.js"></script>
+<script src="./js/vueWork.js"></script>
+
+</html>
